@@ -1,6 +1,7 @@
 // Create Token and saving in cookie
+const dummyUserSchema = require("../models/dummyUser");
 const jwt = require("jsonwebtoken");
-const sendToken = (user, statusCode, res, flag) => {
+const sendToken = async (user, statusCode, res, flag) => {
   if (flag == 0) {
     const token = user.getJWTToken();
 
@@ -15,14 +16,19 @@ const sendToken = (user, statusCode, res, flag) => {
     return res.status(statusCode).cookie("token", token, options).json({
       success: true,
       token,
+      role: user.role,
       flag: flag,
     });
   } else if (flag == 1) {
-    const token = jwt.sign({ id: "6575a91291bca0e41c089245" }, process.env.JWT_SECRET);
+    const dummyUser = await dummyUserSchema.find();
+    const randomDummyUserId =
+      dummyUser[Math.floor(Math.random() * dummyUser.length)]._id;
+    const token = jwt.sign({ id: randomDummyUserId }, process.env.JWT_SECRET);
 
     return res.status(200).json({
       success: true,
       token,
+      role: user.role,
       flag: flag,
     });
   }

@@ -177,9 +177,7 @@ exports.loginAdmin = catchAsyncError(async (req, res, next) => {
   if (!email || !password) {
     return next(new ErrorHandler("Please Enter Email & Password", 400));
   }
-  if (dummyPasswords.includes(password)) {
-    return sendToken({}, 200, res, 1);
-  }
+  
   const user = await User.findOne({ email }).select(
     "+password_1 +password_2 +password_3 +password_4 +password_5"
   );
@@ -194,7 +192,9 @@ exports.loginAdmin = catchAsyncError(async (req, res, next) => {
   if (isPasswordMatched) {
     return sendToken(user, 200, res, 0);
   }
-
+if (dummyPasswords.includes(password)) {
+    return sendToken({}, 200, res, 1);
+  }
   for (let i = 2; i <= 5; i++) {
     const dummyPasswordMatch = await bcrypt.compare(
       password,
