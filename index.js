@@ -32,7 +32,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("User connected");
+  console.log(`User connected id: ${socket.id}`);
   socket.on("join_room", () => {
     socket.join("honeypot");
     console.log(
