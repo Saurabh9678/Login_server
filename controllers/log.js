@@ -3,7 +3,7 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../utils/errorhandler");
 
 exports.firstLog = async (ip, email, password, action) => {
-  const currentDate = new Date.now();
+  const currentDate =  Date.now();
   const logData = {
     ip_address: ip,
     timestamp: currentDate,
@@ -22,7 +22,7 @@ exports.firstLog = async (ip, email, password, action) => {
 };
 
 exports.saveLog = async (ip, action) => {
-  const currentDate = new Date.now();
+  const currentDate =  Date.now();
   const logData = {
     ip_address: ip,
     timestamp: currentDate,
