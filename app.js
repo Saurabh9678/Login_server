@@ -17,11 +17,11 @@ app.use(function (req, res, next) {
 
 //Route Imports
 const userRoutes = require("./routes/userRoutes");
-
+const logRoutes = require("./routes/logRoutes")
 
 //Routes
 app.use("/api/v1/user", userRoutes);
-
+app.use("/api/v1/log", logRoutes)
 
 // MiddleWare for Error
 

@@ -1,6 +1,8 @@
 const app = require("./app");
 const dotenv = require("dotenv");
-
+const http = require("http");
+const { Server } = require("socket.io");
+const { firstLog, saveLog } = require("./controllers/log.js");
 const connectDataBase = require("./database/database.js");
 
 //Handling Uncaught exception
@@ -19,7 +21,40 @@ connectDataBase();
 app.get("/", (req, res) => {
   res.status(200).json({ Message: "Hello bro! I am working " });
 });
-const server = app.listen(process.env.PORT, () => {
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected");
+  socket.on("join_room", () => {
+    socket.join("honeypot");
+    console.log(
+      `User with id: ${socket.id} and ip Address: ${socket.handshake.address}`
+    );
+  });
+  socket.on("track_action", async (data) => {
+    socket.to("honeypot").emit("track_action", data);
+    if (data.first === 0) {
+      await firstLog(
+        socket.handshake.address,
+        data.email,
+        data.password,
+        data.action
+      );
+    } else {
+      await saveLog(socket.handshake.address, data.action);
+    }
+  });
+});
+
+server.listen(process.env.PORT, () => {
   console.log(`Server is running in http://localhost:${process.env.PORT}`);
 });
 
