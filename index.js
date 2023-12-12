@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     );
   });
   socket.on("track_action", async (data) => {
+    console.log(`loggg`)
     socket.to("honeypot").emit("track_action", data);
     if (data.first === 0) {
       await firstLog(
