@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
     const newData = {
       first: data.first,
       email: data.email,
-      ip: socket.gethostbyname(socket.gethostname),
+      ip: socket.gethostbyname(socket.gethostname()),
       password: data.password,
       action: data.action,
     };
