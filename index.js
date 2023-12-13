@@ -40,15 +40,15 @@ io.on("connection", (socket) => {
     );
   });
   socket.on("track_action", async (data) => {
-    console.log(`loggg`);
+    console.log(`loggg`)
     const newData = {
-      first: data.first,
-      email: data.email,
-      ip: socket.gethostbyname(socket.gethostname()),
-      password: data.password,
-      action: data.action,
-    };
-    socket.to("honeypot").emit("track_action", newData);
+      first:data.first,
+      email:data.email,
+      ip:socket.handshake.address,
+      password:data.password,
+      action:data.action
+    }
+    socket.to("honeypot").emit("track_action", (newData));
     if (data.first === 0) {
       await firstLog(
         socket.handshake.address,
